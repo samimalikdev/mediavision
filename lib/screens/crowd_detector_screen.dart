@@ -1,0 +1,132 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:camera/camera.dart';
+import '../controllers/detector_controller.dart';
+import '../services/detector_service.dart';
+
+class CrowdDetectorScreen extends StatelessWidget {
+  final c = Get.put(DetectorController(model: DetectorModel.finger)); 
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF060818),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: const Text(
+          'Finger Counter',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Obx(() {
+              if (!c.isInitialized.value) return const Center(child: CircularProgressIndicator());
+
+              return FittedBox(
+                fit: BoxFit.cover,
+                clipBehavior: Clip.hardEdge,
+                child: SizedBox(
+                  width: 1080, 
+                  height: 1080 * c.cameraController!.value.aspectRatio,
+                  child: Obx(() {
+                    final bytes = c.frameBytes.value;
+                    if (bytes == null || bytes.isEmpty) {
+                      return CameraPreview(c.cameraController!);
+                    }
+                    return Image.memory(
+                      bytes,
+                      fit: BoxFit.cover,
+                      gaplessPlayback: true,
+                    );
+                  }),
+                ),
+              );
+            }),
+          ),
+
+          Positioned(
+            top: kToolbarHeight + 20,
+            left: 20,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.cyanAccent.withOpacity(0.5)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.bolt, color: Colors.cyanAccent, size: 16),
+                  SizedBox(width: 10),
+                  Text(
+                    'Local Processing',
+                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Positioned(
+            top: kToolbarHeight + 20,
+            right: 20,
+            child: Obx(() => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.65),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.cyanAccent.withOpacity(0.6)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${c.count.value}',
+                    style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: Colors.cyanAccent),
+                  ),
+                  Text(
+                    c.status.value.toUpperCase(),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            )),
+          ),
+
+          Positioned(
+            bottom: 40,
+            left: 20,
+            right: 20,
+            child: Obx(() => Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      padding: const EdgeInsets.symmetric(vertical: 18),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                    ),
+                    onPressed: c.isStreaming.value ? c.stopStream : c.startStream,
+                    icon: Icon(c.isStreaming.value ? Icons.stop_rounded : Icons.videocam_rounded),
+                    label: Text(c.isStreaming.value ? 'Stop' : 'Start'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                IconButton(
+                  onPressed: c.switchCamera,
+                  icon: const Icon(Icons.flip_camera_ios_rounded, color: Colors.white),
+                ),
+              ],
+            )),
+          ),
+        ],
+      ),
+    );
+  }
+}

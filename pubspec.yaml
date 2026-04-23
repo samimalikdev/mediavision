@@ -1,0 +1,35 @@
+name: frontend
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  camera: ^0.12.0
+  flutter:
+    sdk: flutter
+  flutter_webrtc: ^1.4.0
+  get: ^4.7.3
+  http: ^1.6.0
+  image: ^4.8.0
+  image_picker: ^1.2.1
+  web_socket_channel: ^3.0.3
+  gal: ^2.1.2
+  path_provider: ^2.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/app_icon.png"
+  min_sdk_android: 21
+
+flutter:
+  uses-material-design: true
