@@ -44,6 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# User requested ignore
+# User requested ignores
 README.md
 build_corrupted/
+
