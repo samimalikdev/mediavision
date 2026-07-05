@@ -154,10 +154,14 @@ flutter run --release
 
 ## Screenshots
 
+
 <p align="center">
-  <img src="assets/icon/Screenshot1.jpeg" width="300" alt="MediaVision Screenshot"/>
+  <img src="assets/mediaivisonbanner.png" width="100%" alt="App 1"/>
 </p>
 
+<p align="center">
+  <img src="assets/mediavision.png" width="100%" alt="App 1"/>
+</p>
 ---
 
 ## Limitations
